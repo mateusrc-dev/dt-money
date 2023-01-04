@@ -3,6 +3,8 @@ import { MagnifyingGlass } from "phosphor-react";
 import { useForm } from "react-hook-form"; // para criar o formulário
 import * as zod from "zod"; // vamos importar o zod pra criar o schema
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useContext } from "react";
+import { TransactionsContext } from "../../../../contexts/TransactionsContext";
 
 const searchFormSchema = zod.object({
   // criando nosso schema - formato do objeto de dados que vamos receber quando realizamos o submit do formulário
@@ -12,6 +14,7 @@ const searchFormSchema = zod.object({
 type SearchFormInputs = zod.infer<typeof searchFormSchema>; // criando a tipagem do formulário - vamos usar infer pra inferir a tipagem de searchFormSchema
 
 export function SearchForm() {
+  const { fetchTransactions } = useContext(TransactionsContext)
   const { register, handleSubmit, formState } = useForm<SearchFormInputs>({ // vamos dizer qual a tipagem do nosso formulário
     resolver: zodResolver(searchFormSchema), // vamos dizer qual schema do nosso formulário
   });
@@ -20,9 +23,7 @@ export function SearchForm() {
 
  async function handleSearchTransactions(data: SearchFormInputs) {
     // vamos colocar essa função dentro de handleSubmit - data vai ser os valores dos campos do formulário
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    console.log(data);
+    await fetchTransactions(data.query)
   }
 
   return (

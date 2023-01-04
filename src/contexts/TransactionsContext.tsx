@@ -13,6 +13,7 @@ interface Transaction {
 interface TransactionsContextType {
   // vamos informar quais informações vamos armazenar/retornar desse contexto
   transactions: Transaction[];
+  fetchTransactions: (data?: string) => Promise<void> //função é assíncrona, por isso o Promise
 }
 
 export const TransactionsContext = createContext<TransactionsContextType>(
@@ -27,17 +28,23 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   // esse componente vai retornar o nosso Provider com as propriedades do contexto
   const [transactions, setTransactions] = useState<Transaction[]>([]); // vamos criar um estado para colocar os dados da API
   // vamos usar a API de fetch do navegador - vamos passar o endereço de onde está a nossa API - fetch vai nos devolver os dados 'then' - é uma promise - demora um tempo para executar - lembrando que colocamos um delay - sempre que esse componente for renderizado novamente o fetch vai ser executado - por isso vamos usar o useEffect com o array de dependências vazio para fetch ser executado apenas uma vez - vamos ter que converter a Stream (forma de receber dados particionados da requisição) para outro formato (no caso vai ser json) - React não permite usar async diretamente no useEffect, temos que criar uma função dentro
-  useEffect(() => {
-    async function Transactions() {
-      // podemos colocar essa função fora do useEffect se desejarmos
-      const response = await fetch("http://localhost:3333/transactions"); // vamos esperar a resposta da requisição
-      const data = await response.json(); // vamos esperar a transformação dos dados da requisição para json
-      setTransactions(data);
+  async function fetchTransactions(query?: string) { //vamos deixar a query como opcional porque no primeiro carregamento não haverá busca
+    // podemos colocar essa função fora do useEffect se desejarmos
+    const url = new URL('http://localhost:3333/transactions')
+
+    if (query) {
+      url.searchParams.append('q', query)
     }
-    Transactions();
+
+    const response = await fetch(url); // vamos esperar a resposta da requisição
+    const data = await response.json(); // vamos esperar a transformação dos dados da requisição para json
+    setTransactions(data);
+  }
+  useEffect(() => { 
+    fetchTransactions();
   }, []);
   return (
-    <TransactionsContext.Provider value={{ transactions }}>
+    <TransactionsContext.Provider value={{ transactions, fetchTransactions }}>
       {children}
     </TransactionsContext.Provider>
   );
