@@ -1,6 +1,14 @@
 import * as Dialog from "@radix-ui/react-dialog"; // importando o nosso modal da biblioteca radix - tudo da biblioteca vai ficar dentro de Dialog - podemos desestruturar e pegar somente o 'Root'
-import { Content, Overlay, CloseButton } from "./styles";
+import {
+  Content,
+  Overlay,
+  CloseButton,
+  TransactionType,
+  TransactionTypeButton,
+} from "./styles";
 import { X } from "phosphor-react";
+import { ArrowCircleUp } from "phosphor-react";
+import { ArrowCircleDown } from "phosphor-react";
 
 export function NewTransactionModal() {
   // esse componente vai ter o conteúdo do modal
@@ -20,6 +28,17 @@ export function NewTransactionModal() {
           <input type="text" placeholder="Descrição" required />
           <input type="number" placeholder="Preço" required />
           <input type="text" placeholder="Categoria" required />
+
+          <TransactionType>
+            <TransactionTypeButton variant="income" value="income"> {/*colocar o value se torna obrigatório quando usamos o RadioGroup na estilização - indica o valor do item no formulário quando ele for submetido */}
+              <ArrowCircleUp size={24} />
+              Entrada
+            </TransactionTypeButton>
+            <TransactionTypeButton variant="outcome" value="outcome">
+              <ArrowCircleDown size={24} />
+              Saída
+            </TransactionTypeButton>
+          </TransactionType>
 
           <button type="submit">Cadastrar</button>
         </form>
