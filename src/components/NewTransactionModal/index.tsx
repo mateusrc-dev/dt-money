@@ -9,28 +9,37 @@ import {
 import { X } from "phosphor-react";
 import { ArrowCircleUp } from "phosphor-react";
 import { ArrowCircleDown } from "phosphor-react";
-import * as zod from "zod"
+import * as zod from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller } from "react-hook-form";
 
 const newTransactionFormSchema = zod.object({
   description: zod.string(),
   price: zod.number(),
   category: zod.string(),
-  //type: zod.enum(['income', 'outcome']), // enum é usado quando temos uma enumeração, opções
-})
+  type: zod.enum(["income", "outcome"]), // enum é usado quando temos uma enumeração, opções
+});
 
-type NewTransactionFormInputs = zod.infer<typeof newTransactionFormSchema>
+type NewTransactionFormInputs = zod.infer<typeof newTransactionFormSchema>;
 
 export function NewTransactionModal() {
   // esse componente vai ter o conteúdo do modal
-  const { register, handleSubmit, formState: {isSubmitting} } = useForm<NewTransactionFormInputs>({
-    resolver: zodResolver(newTransactionFormSchema)
-  })
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+    control,
+  } = useForm<NewTransactionFormInputs>({
+    resolver: zodResolver(newTransactionFormSchema),
+    defaultValues: {
+      type: 'income'
+    }
+  });
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-    await new Promise(resolve => setTimeout(resolve, 2000)) // para simular uma lentidão
-    console.log(data)
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // para simular uma lentidão
+    console.log(data);
   }
   return (
     <Dialog.Portal>
@@ -45,22 +54,48 @@ export function NewTransactionModal() {
         </CloseButton>
         {/*para colocar o botão de fechar */}
         <form onSubmit={handleSubmit(handleCreateNewTransaction)}>
-          <input type="text" placeholder="Descrição" required {...register('description')} />
-          <input type="number" placeholder="Preço" required {...register('price', {valueAsNumber: true})} /> {/*'valueAsNumber: true' é para o número retornado pelo input ser do tipo number*/}
-          <input type="text" placeholder="Categoria" required {...register('category')} />
-
-          <TransactionType>
-            <TransactionTypeButton variant="income" value="income"> {/*colocar o value se torna obrigatório quando usamos o RadioGroup na estilização - indica o valor do item no formulário quando ele for submetido */}
-              <ArrowCircleUp size={24} />
-              Entrada
-            </TransactionTypeButton>
-            <TransactionTypeButton variant="outcome" value="outcome">
-              <ArrowCircleDown size={24} />
-              Saída
-            </TransactionTypeButton>
-          </TransactionType>
-
-          <button type="submit" disabled={isSubmitting}>Cadastrar</button>
+          <input
+            type="text"
+            placeholder="Descrição"
+            required
+            {...register("description")}
+          />
+          <input
+            type="number"
+            placeholder="Preço"
+            required
+            {...register("price", { valueAsNumber: true })}
+          />
+          {/*'valueAsNumber: true' é para o número retornado pelo input ser do tipo number*/}
+          <input
+            type="text"
+            placeholder="Categoria"
+            required
+            {...register("category")}
+          />
+          <Controller // Controller é um componente que vem do react-hook-form
+            control={control}
+            name="type" // aqui é o nome do campo
+            render={({field}) => { //do render podemos pegar propriedades - field dentro de props tem os eventos para conseguir alterar o valor do campo - tem o onChange - função que salva o valor dentro do formulário - tem também o value (valor atual do campo)
+              return (
+                // essa função retorna o conteúdo relacionado a esse campo - a forma de inserir o campo type no formulário
+                <TransactionType onValueChange={field.onChange} value={field.value}> {/*vamos chamar a função onChange de field quando o valor de onValueChange mudar (essa função retorna qual item foi selecionado e muda em tempo real de acordo com a seleção) - vamos colocar a informação do onChange de field no value*/}
+                  <TransactionTypeButton variant="income" value="income">
+                    {/*colocar o value se torna obrigatório quando usamos o RadioGroup na estilização - indica o valor do item no formulário quando ele for submetido */}
+                    <ArrowCircleUp size={24} />
+                    Entrada
+                  </TransactionTypeButton>
+                  <TransactionTypeButton variant="outcome" value="outcome">
+                    <ArrowCircleDown size={24} />
+                    Saída
+                  </TransactionTypeButton>
+                </TransactionType>
+              );
+            }}
+          />
+          <button type="submit" disabled={isSubmitting}>
+            Cadastrar
+          </button>
         </form>
       </Content>
     </Dialog.Portal>
