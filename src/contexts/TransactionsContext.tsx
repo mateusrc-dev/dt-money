@@ -11,10 +11,18 @@ interface Transaction {
   createdAt: string;
 }
 
+interface CreateTransactionInput { // tipagem da nova transação - vamos criar novamnte a tipagem para desaclopar o context do componente NewTransactionModal
+  description: string,
+  price: number,
+  category: string,
+  type: 'income' | 'outcome',
+}
+
 interface TransactionsContextType {
   // vamos informar quais informações vamos armazenar/retornar desse contexto
   transactions: Transaction[];
   fetchTransactions: (data?: string) => Promise<void> //função é assíncrona, por isso o Promise
+  createTransaction: (data: CreateTransactionInput) => Promise<void>
 }
 
 export const TransactionsContext = createContext<TransactionsContextType>(
@@ -33,16 +41,30 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     // podemos colocar essa função fora do useEffect se desejarmos
     const response = await api.get('transactions', { //requisição pelo axios (não precisamos colocar toda vez a url)
       params: { // são os nossos searchParams
+        _sort: 'createdAt', // vamos ordenar por esse campo (informações de como fazer isso está no github do json-server)
+        _order: 'desc', // a ordem vai ser decrescente
         q: query,
       }
     })
     setTransactions(response.data);
   }
+  async function createTransaction(data: CreateTransactionInput) { // vamos criar essa função aqui porque vamos usar o 'response' para atualizar o estado 'transactions' e a lista atualizar automaticamente
+    const { category, description, price, type } = data
+    const response = await api.post('transactions', { //usando método http post para criar algo - transactions é a rota
+      // aqui ficar o corpo da requisição, é os dados que vamos enviar para serem inseridos em transactions (que é uma entidade) - não precisamos enviar o id (o json-server cria sozinho)
+      category,
+      description,
+      price,
+      type,
+      createdAt: new Date(), // no backend na vida real não é preciso enviar porque o backend gera automaticamente
+    }) 
+    setTransactions(state => [response.data, ...state])
+  }
   useEffect(() => { 
     fetchTransactions();
   }, []);
   return (
-    <TransactionsContext.Provider value={{ transactions, fetchTransactions }}>
+    <TransactionsContext.Provider value={{ transactions, fetchTransactions, createTransaction }}>
       {children}
     </TransactionsContext.Provider>
   );

@@ -13,7 +13,8 @@ import * as zod from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller } from "react-hook-form";
-import { api } from "../../lib/axios";
+import { useContext } from "react";
+import { TransactionsContext } from "../../contexts/TransactionsContext";
 
 const newTransactionFormSchema = zod.object({
   description: zod.string(),
@@ -26,11 +27,13 @@ type NewTransactionFormInputs = zod.infer<typeof newTransactionFormSchema>;
 
 export function NewTransactionModal() {
   // esse componente vai ter o conteúdo do modal
+  const { createTransaction } = useContext(TransactionsContext)
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
-    control,
+    control, //para fazer o controle do value do RadioGroup
+    reset,
   } = useForm<NewTransactionFormInputs>({
     resolver: zodResolver(newTransactionFormSchema),
     defaultValues: {
@@ -39,15 +42,8 @@ export function NewTransactionModal() {
   });
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-    const { category, description, price, type } = data
-    await api.post('transactions', { //usando método http post para criar algo - transactions é a rota
-      // aqui ficar o corpo da requisição, é os dados que vamos enviar para serem inseridos em transactions (que é uma entidade) - não precisamos enviar o id (o json-server cria sozinho)
-      category,
-      description,
-      price,
-      type,
-      createdAt: new Date(), // no backend na vida real não é preciso enviar porque o backend gera automaticamente
-    }) 
+    createTransaction(data)
+    reset() // para zerar as informações do formulário
   }
   return (
     <Dialog.Portal>
