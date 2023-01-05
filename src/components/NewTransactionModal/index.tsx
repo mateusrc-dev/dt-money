@@ -13,6 +13,7 @@ import * as zod from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller } from "react-hook-form";
+import { api } from "../../lib/axios";
 
 const newTransactionFormSchema = zod.object({
   description: zod.string(),
@@ -38,8 +39,15 @@ export function NewTransactionModal() {
   });
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // para simular uma lentidão
-    console.log(data);
+    const { category, description, price, type } = data
+    await api.post('transactions', { //usando método http post para criar algo - transactions é a rota
+      // aqui ficar o corpo da requisição, é os dados que vamos enviar para serem inseridos em transactions (que é uma entidade) - não precisamos enviar o id (o json-server cria sozinho)
+      category,
+      description,
+      price,
+      type,
+      createdAt: new Date(), // no backend na vida real não é preciso enviar porque o backend gera automaticamente
+    }) 
   }
   return (
     <Dialog.Portal>

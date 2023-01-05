@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
+import { api } from "../lib/axios";
 
 interface Transaction {
   // é sempre importante tipar o estado, principalmente se ele for array ou objeto
@@ -30,15 +31,12 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   // vamos usar a API de fetch do navegador - vamos passar o endereço de onde está a nossa API - fetch vai nos devolver os dados 'then' - é uma promise - demora um tempo para executar - lembrando que colocamos um delay - sempre que esse componente for renderizado novamente o fetch vai ser executado - por isso vamos usar o useEffect com o array de dependências vazio para fetch ser executado apenas uma vez - vamos ter que converter a Stream (forma de receber dados particionados da requisição) para outro formato (no caso vai ser json) - React não permite usar async diretamente no useEffect, temos que criar uma função dentro
   async function fetchTransactions(query?: string) { //vamos deixar a query como opcional porque no primeiro carregamento não haverá busca
     // podemos colocar essa função fora do useEffect se desejarmos
-    const url = new URL('http://localhost:3333/transactions')
-
-    if (query) {
-      url.searchParams.append('q', query)
-    }
-
-    const response = await fetch(url); // vamos esperar a resposta da requisição
-    const data = await response.json(); // vamos esperar a transformação dos dados da requisição para json
-    setTransactions(data);
+    const response = await api.get('transactions', { //requisição pelo axios (não precisamos colocar toda vez a url)
+      params: { // são os nossos searchParams
+        q: query,
+      }
+    })
+    setTransactions(response.data);
   }
   useEffect(() => { 
     fetchTransactions();
