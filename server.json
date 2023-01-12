@@ -55,6 +55,30 @@
       "type": "outcome",
       "createdAt": "2023-01-05T01:11:34.978Z",
       "id": 7
+    },
+    {
+      "category": "Despesas",
+      "description": "Manutenção do notebook",
+      "price": 250,
+      "type": "outcome",
+      "createdAt": "2023-01-12T19:28:00.924Z",
+      "id": 8
+    },
+    {
+      "category": "Vendas",
+      "description": "Desenvolvimento de site",
+      "price": 20000,
+      "type": "income",
+      "createdAt": "2023-01-12T19:28:41.348Z",
+      "id": 9
+    },
+    {
+      "category": "Compra",
+      "description": "Comprar memória para notebook",
+      "price": 250,
+      "type": "outcome",
+      "createdAt": "2023-01-12T21:30:02.719Z",
+      "id": 10
     }
   ]
 }
