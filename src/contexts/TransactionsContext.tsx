@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
+import { createContext } from 'use-context-selector'
 import { api } from '../lib/axios'
 
 interface Transaction {
@@ -62,7 +63,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
       description,
       price,
       type,
-      createdAt: new Date(), // no backend na vida real não é preciso enviar porque o backend gera automaticamente
+      createdAt: new Date(), // no backend na vida real não é preciso enviar essa data porque o backend gera automaticamente
     })
     setTransactions((state) => [response.data, ...state])
   }

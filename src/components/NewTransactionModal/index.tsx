@@ -12,7 +12,7 @@ import * as zod from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useContext } from 'react'
+import { useContextSelector } from 'use-context-selector'
 import { TransactionsContext } from '../../contexts/TransactionsContext'
 
 const newTransactionFormSchema = zod.object({
@@ -26,7 +26,12 @@ type NewTransactionFormInputs = zod.infer<typeof newTransactionFormSchema>
 
 export function NewTransactionModal() {
   // esse componente vai ter o conteúdo do modal
-  const { createTransaction } = useContext(TransactionsContext)
+  const createTransaction = useContextSelector(
+    TransactionsContext,
+    (context) => {
+      return context.createTransaction
+    },
+  ) // quando usamos useContextSelector, além do contexto, precisamos passar uma função no parâmetro - vamos colocar no return quais informações do contexto queremos observar mudar, e como vamos retornar uma única função não precisamos mais fazer uma desestruturação
   const {
     register,
     handleSubmit,
