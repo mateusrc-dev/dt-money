@@ -72,7 +72,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   )
   useEffect(() => {
     fetchTransactions()
-  }, [])
+  }, [fetchTransactions]) // useEffect só vai ser disparado uma vez porque fetchTransactions só vai ser renderizada uma vez (pois ela não tem dependências) - vamos precisar colocar fetchTransactions como dependencia porque agora estamos usando useCallback
   return (
     <TransactionsContext.Provider
       value={{ transactions, fetchTransactions, createTransaction }}
