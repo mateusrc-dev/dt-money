@@ -101,8 +101,13 @@ export const Pages = styled.div`
   gap: 1rem;
 `
 
-export const Page = styled.button`
-  background: ${(props) => props.theme['gray-700']};
+interface PageProps {
+  active: boolean
+}
+
+export const Page = styled.button<PageProps>`
+  background: ${(props) =>
+    props.active === true ? props.theme['green-500'] : props.theme['gray-700']};
   color: ${(props) => props.theme.white};
   border-radius: 6px;
   width: 3rem;
@@ -112,4 +117,19 @@ export const Page = styled.button`
   &:hover {
     filter: brightness(0.7);
   }
+`
+
+export const Loading = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  background: rgba(0, 0, 0, 0.5);
+  color: ${(props) => props.theme.white};
+  font-style: italic;
 `

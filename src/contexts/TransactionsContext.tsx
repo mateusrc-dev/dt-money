@@ -33,6 +33,8 @@ interface TransactionsContextType {
   fetchAllTransactions: (data?: string) => Promise<void>
   createTransaction: (data: CreateTransactionInput) => Promise<void>
   deleteTransaction: (transactionId: number) => Promise<void>
+  loading: boolean
+  page: number
 }
 
 export const TransactionsContext = createContext<TransactionsContextType>(
@@ -47,12 +49,18 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   // esse componente vai retornar o nosso Provider com as propriedades do contexto
   const [transactions, setTransactions] = useState<Transaction[]>([]) // vamos criar um estado para colocar os dados da API
   // vamos usar a API de fetch do navegador - vamos passar o endereço de onde está a nossa API - fetch vai nos devolver os dados 'then' - é uma promise - demora um tempo para executar - lembrando que colocamos um delay - sempre que esse componente for renderizado novamente o fetch vai ser executado - por isso vamos usar o useEffect com o array de dependências vazio para fetch ser executado apenas uma vez - vamos ter que converter a Stream (forma de receber dados particionados da requisição) para outro formato (no caso vai ser json) - React não permite usar async diretamente no useEffect, temos que criar uma função dentro
+  const [loading, setLoading] = useState(false)
+  const [page, setPage] = useState(0)
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([])
   const fetchTransactions = useCallback(
     async (data: fetchTransactionsProps) => {
       const { query, page } = data
       // vamos deixar a query como opcional porque no primeiro carregamento não haverá busca
       // podemos colocar essa função fora do useEffect se desejarmos
+      if (page !== undefined) {
+        setPage(page)
+      }
+      setLoading(true)
       const response = await api.get('transactions', {
         // requisição pelo axios (não precisamos colocar toda vez a url)
         params: {
@@ -65,6 +73,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         },
       })
       setTransactions(response.data)
+      setLoading(false)
     },
     [],
   )
@@ -120,6 +129,8 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         fetchAllTransactions,
         createTransaction,
         deleteTransaction,
+        loading,
+        page,
       }}
     >
       {children}

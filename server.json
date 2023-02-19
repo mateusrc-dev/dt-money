@@ -1,22 +1,6 @@
 {
   "transactions": [
     {
-      "category": "compra",
-      "description": "mangá do naruto",
-      "price": 50,
-      "type": "outcome",
-      "createdAt": "2023-02-19T15:36:38.197Z",
-      "id": 1
-    },
-    {
-      "category": "compra",
-      "description": "curso rocketseat ignite",
-      "price": 2000,
-      "type": "outcome",
-      "createdAt": "2023-02-19T15:37:01.242Z",
-      "id": 2
-    },
-    {
       "category": "trabalho",
       "description": "freelance",
       "price": 5000,
@@ -47,6 +31,22 @@
       "type": "income",
       "createdAt": "2023-02-19T16:23:33.723Z",
       "id": 6
+    },
+    {
+      "category": "trabalho",
+      "description": "Desenvolvimento de app",
+      "price": 10000,
+      "type": "income",
+      "createdAt": "2023-02-19T17:43:31.089Z",
+      "id": 7
+    },
+    {
+      "category": "compra",
+      "description": "mangá do one piece",
+      "price": 100,
+      "type": "outcome",
+      "createdAt": "2023-02-19T17:44:20.584Z",
+      "id": 8
     }
   ]
 }

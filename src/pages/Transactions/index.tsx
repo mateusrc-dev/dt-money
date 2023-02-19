@@ -10,6 +10,7 @@ import {
   Button,
   Container,
   ContainerWarning,
+  Loading,
   Page,
   Pages,
   PriceHighLight,
@@ -33,6 +34,14 @@ export function Transactions() {
       return context.deleteTransaction
     },
   )
+
+  const loading = useContextSelector(TransactionsContext, (context) => {
+    return context.loading
+  })
+
+  const page = useContextSelector(TransactionsContext, (context) => {
+    return context.page
+  })
 
   const fetchTransactions = useContextSelector(
     TransactionsContext,
@@ -111,13 +120,18 @@ export function Transactions() {
         <Pages>
           {Array.from(Array(count).keys()).map((day) => {
             return (
-              <Page onClick={() => handlePage(day + 1)} key={day}>
+              <Page
+                onClick={() => handlePage(day + 1)}
+                key={day}
+                active={day + 1 === page}
+              >
                 {day + 1}
               </Page>
             )
           })}
         </Pages>
       </TransactionsContainer>
+      {loading && <Loading>Carregando...</Loading>}
     </Container>
   )
 }
