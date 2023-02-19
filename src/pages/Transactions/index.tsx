@@ -17,6 +17,16 @@ export function Transactions() {
   const transactions = useContextSelector(TransactionsContext, (context) => {
     return context.transactions
   })
+  const deleteTransaction = useContextSelector(
+    TransactionsContext,
+    (context) => {
+      return context.deleteTransaction
+    },
+  )
+
+  function handleDeleteTransaction(transactionId: number) {
+    deleteTransaction(transactionId)
+  }
 
   return (
     <Container>
@@ -44,7 +54,10 @@ export function Transactions() {
                     {dateFormatter.format(new Date(transaction.createdAt))}
                   </td>
                   <td>
-                    <Button title="excluir transação">
+                    <Button
+                      title="excluir transação"
+                      onClick={() => handleDeleteTransaction(transaction.id)}
+                    >
                       <Trash />
                     </Button>
                   </td>

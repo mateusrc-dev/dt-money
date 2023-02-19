@@ -25,6 +25,7 @@ interface TransactionsContextType {
   transactions: Transaction[]
   fetchTransactions: (data?: string) => Promise<void> // função é assíncrona, por isso o Promise
   createTransaction: (data: CreateTransactionInput) => Promise<void>
+  deleteTransaction: (transactionId: number) => Promise<void>
 }
 
 export const TransactionsContext = createContext<TransactionsContextType>(
@@ -70,12 +71,29 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     },
     [], // esse array de dependencias desse hook funciona como a dependencia do useEffect, a função é criada em memória caso a variável incluída na dependencia mudar, se a dependencia ficar vazia a função nunca vai ser criada em memória - se essa função depende de uma informação de fora, ela precisa ser colocada no array de dependencias
   )
+  const deleteTransaction = useCallback(async (transactionId: number) => {
+    await api.delete(`transactions/${transactionId}`)
+    const response = await api.get('transactions', {
+      // requisição pelo axios (não precisamos colocar toda vez a url)
+      params: {
+        // são os nossos searchParams
+        _sort: 'createdAt', // vamos ordenar por esse campo (informações de como fazer isso está no github do json-server)
+        _order: 'desc', // a ordem vai ser decrescente
+      },
+    })
+    setTransactions(response.data)
+  }, [])
   useEffect(() => {
     fetchTransactions()
   }, [fetchTransactions]) // useEffect só vai ser disparado uma vez porque fetchTransactions só vai ser renderizada uma vez (pois ela não tem dependências) - vamos precisar colocar fetchTransactions como dependencia porque agora estamos usando useCallback
   return (
     <TransactionsContext.Provider
-      value={{ transactions, fetchTransactions, createTransaction }}
+      value={{
+        transactions,
+        fetchTransactions,
+        createTransaction,
+        deleteTransaction,
+      }}
     >
       {children}
     </TransactionsContext.Provider>
