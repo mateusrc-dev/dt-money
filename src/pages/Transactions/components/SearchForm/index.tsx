@@ -29,7 +29,7 @@ export function SearchForm() {
 
   async function handleSearchTransactions(data: SearchFormInputs) {
     // vamos colocar essa função dentro de handleSubmit - data vai ser os valores dos campos do formulário
-    await fetchTransactions(data.query)
+    await fetchTransactions({ query: data.query })
   }
 
   return (

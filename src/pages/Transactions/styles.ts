@@ -78,3 +78,38 @@ export const Button = styled.button`
   font-size: 1.5rem;
   cursor: pointer;
 `
+
+export const ContainerWarning = styled.div`
+  background: ${(props) => props.theme['gray-700']};
+  padding: 1.25rem 2rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  font-size: 2rem;
+  font-style: italic;
+  svg {
+    font-size: 6rem;
+  }
+`
+
+export const Pages = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+`
+
+export const Page = styled.button`
+  background: ${(props) => props.theme['gray-700']};
+  color: ${(props) => props.theme.white};
+  border-radius: 6px;
+  width: 3rem;
+  height: 3.5rem;
+  border: 0;
+  cursor: pointer;
+  &:hover {
+    filter: brightness(0.7);
+  }
+`
