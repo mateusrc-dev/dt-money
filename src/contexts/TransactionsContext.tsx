@@ -30,7 +30,7 @@ interface TransactionsContextType {
   transactions: Transaction[]
   allTransactions: Transaction[]
   fetchTransactions: (data: fetchTransactionsProps) => Promise<void> // função é assíncrona, por isso o Promise
-  fetchAllTransactions: (data?: string) => Promise<void>
+  fetchAllTransactions: () => Promise<void>
   createTransaction: (data: CreateTransactionInput) => Promise<void>
   deleteTransaction: (transactionId: number) => Promise<void>
   loading: boolean
@@ -77,12 +77,11 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     },
     [],
   )
-  const fetchAllTransactions = useCallback(async (query?: string) => {
+  const fetchAllTransactions = useCallback(async () => {
     const response = await api.get('transactions', {
       params: {
         _sort: 'createdAt',
         _order: 'desc',
-        q: query,
       },
     })
     setAllTransactions(response.data)
@@ -90,8 +89,9 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const createTransaction = useCallback(
     async (data: CreateTransactionInput) => {
       // vamos criar essa função aqui porque vamos usar o 'response' para atualizar o estado 'transactions' e a lista atualizar automaticamente
+      setLoading(true)
       const { category, description, price, type } = data
-      const response = await api.post('transactions', {
+      await api.post('transactions', {
         // usando método http post para criar algo - transactions é a rota
         // aqui ficar o corpo da requisição, é os dados que vamos enviar para serem inseridos em transactions (que é uma entidade) - não precisamos enviar o id (o json-server cria sozinho)
         category,
@@ -100,22 +100,22 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         type,
         createdAt: new Date(), // no backend na vida real não é preciso enviar essa data porque o backend gera automaticamente
       })
-      setTransactions((state) => [response.data, ...state])
+      fetchTransactions({ page })
+      fetchAllTransactions()
+      setLoading(false)
     },
-    [], // esse array de dependencias desse hook funciona como a dependencia do useEffect, a função é criada em memória caso a variável incluída na dependencia mudar, se a dependencia ficar vazia a função nunca vai ser criada em memória - se essa função depende de uma informação de fora, ela precisa ser colocada no array de dependencias
+    [fetchTransactions, page, fetchAllTransactions], // esse array de dependencias desse hook funciona como a dependencia do useEffect, a função é criada em memória caso a variável incluída na dependencia mudar, se a dependencia ficar vazia a função nunca vai ser criada em memória - se essa função depende de uma informação de fora, ela precisa ser colocada no array de dependencias
   )
-  const deleteTransaction = useCallback(async (transactionId: number) => {
-    await api.delete(`transactions/${transactionId}`)
-    const response = await api.get('transactions', {
-      // requisição pelo axios (não precisamos colocar toda vez a url)
-      params: {
-        // são os nossos searchParams
-        _sort: 'createdAt', // vamos ordenar por esse campo (informações de como fazer isso está no github do json-server)
-        _order: 'desc', // a ordem vai ser decrescente
-      },
-    })
-    setTransactions(response.data)
-  }, [])
+  const deleteTransaction = useCallback(
+    async (transactionId: number) => {
+      setLoading(true)
+      await api.delete(`transactions/${transactionId}`)
+      fetchTransactions({ page })
+      fetchAllTransactions()
+      setLoading(false)
+    },
+    [page, fetchTransactions, fetchAllTransactions],
+  )
   useEffect(() => {
     fetchTransactions({ page: 1 })
     fetchAllTransactions()

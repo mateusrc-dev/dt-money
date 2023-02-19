@@ -114,7 +114,7 @@ export function Transactions() {
         {transactions.length === 0 ? (
           <ContainerWarning>
             <Warning />
-            Você ainda não caiu nenhuma transação!
+            Você ainda não caiu nenhuma transação nessa página!
           </ContainerWarning>
         ) : null}
         <Pages>

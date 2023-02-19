@@ -121,6 +121,7 @@ export const Page = styled.button<PageProps>`
 
 export const Loading = styled.div`
   position: absolute;
+  z-index: 1;
   top: 0;
   left: 0;
   width: 100%;
