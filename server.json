@@ -87,6 +87,14 @@
       "type": "outcome",
       "createdAt": "2023-01-13T13:49:30.515Z",
       "id": 11
+    },
+    {
+      "category": "trabalho",
+      "description": "freelance",
+      "price": 5000,
+      "type": "income",
+      "createdAt": "2023-02-19T13:57:34.512Z",
+      "id": 12
     }
   ]
 }

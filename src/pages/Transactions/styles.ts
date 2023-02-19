@@ -1,5 +1,29 @@
 import styled from 'styled-components'
 
+export const Container = styled.div`
+  overflow: auto;
+  width: 100%;
+  height: 100vh;
+  &::-webkit-scrollbar {
+    width: 15px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: ${(props) => props.theme['gray-100']};
+    border-radius: 10px;
+    width: 0px;
+    background-clip: padding-box;
+    border: 3px solid transparent;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: ${(props) => props.theme['gray-400']};
+    border-radius: 0px;
+    width: 0px;
+    border-radius: 10px;
+    background-clip: padding-box;
+    border: 3px solid transparent;
+  }
+`
+
 export const TransactionsContainer = styled.main`
   width: 100%;
   max-width: 1120px;
@@ -42,4 +66,15 @@ export const PriceHighLight = styled.span<PriceHighLightProps>`
     props.variant === 'income'
       ? props.theme['green-300']
       : props.theme['red-300']};
+`
+
+export const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  color: ${(props) => props.theme['red-300']};
+  font-size: 1.5rem;
+  cursor: pointer;
 `

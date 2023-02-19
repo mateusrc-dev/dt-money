@@ -7,7 +7,8 @@ export function useSummary() {
     return context.transactions
   })
   // vamos usar o método reduce -> permite percorrer um array e reduzir esse array a uma nova estrutura de dados - nesse caso vamos converter o array de transactions em um objeto com a seguinte estrutura: {income: 0, outcome: 0, total: 0}
-  const summary = useMemo(() => { // ao usar useMemo, a variável summary só vai ser recriada quando o transactions mudar, antes ela era recriada toda vez que o useSummary fosse renderizado de novo
+  const summary = useMemo(() => {
+    // ao usar useMemo, a variável summary só vai ser recriada quando o transactions mudar, antes ela era recriada toda vez que o useSummary fosse renderizado de novo
     return transactions.reduce(
       (acc, transaction) => {
         // dessa função recebemos como parâmetro: 1. resumo atual (accumulator nada mais é que a estrutura inicial abaixo - vamos fazer todas as operações nele - é o que será retornado no final); 2. no segundo recebemos cada transaction da iteração
@@ -18,7 +19,7 @@ export function useSummary() {
           acc.outcome += transaction.price
           acc.total -= transaction.price
         }
-  
+
         return acc
       },
       {

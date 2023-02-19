@@ -1,3 +1,4 @@
+import { Trash } from 'phosphor-react'
 import { useContextSelector } from 'use-context-selector'
 import { Header } from '../../components/Header'
 import { Summary } from '../../components/Summary'
@@ -5,6 +6,8 @@ import { TransactionsContext } from '../../contexts/TransactionsContext'
 import { dateFormatter, priceFormatter } from '../../utils/formatter'
 import { SearchForm } from './components/SearchForm'
 import {
+  Button,
+  Container,
   PriceHighLight,
   TransactionsContainer,
   TransactionsTable,
@@ -16,7 +19,7 @@ export function Transactions() {
   })
 
   return (
-    <div>
+    <Container>
       <Header />
       <Summary />
 
@@ -40,6 +43,11 @@ export function Transactions() {
                   <td>
                     {dateFormatter.format(new Date(transaction.createdAt))}
                   </td>
+                  <td>
+                    <Button title="excluir transação">
+                      <Trash />
+                    </Button>
+                  </td>
                 </tr>
               )
               /* createdAt vem da nossa API como uma string, por isso precisamos converter ele pra uma data */
@@ -47,6 +55,6 @@ export function Transactions() {
           </tbody>
         </TransactionsTable>
       </TransactionsContainer>
-    </div>
+    </Container>
   )
 }
