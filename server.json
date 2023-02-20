@@ -1,3 +1,52 @@
 {
-  "transactions": []
+  "transactions": [
+    {
+      "category": "Trabalho",
+      "description": "Desenvolvimento de app",
+      "price": 5000,
+      "type": "income",
+      "createdAt": "2023-02-20T00:35:03.819Z",
+      "id": 1
+    },
+    {
+      "category": "Trabalho",
+      "description": "Desenvolvimento de app",
+      "price": 1000,
+      "type": "income",
+      "createdAt": "2023-02-20T00:35:13.605Z",
+      "id": 2
+    },
+    {
+      "category": "Compra",
+      "description": "Playstation 5",
+      "price": 5000,
+      "type": "outcome",
+      "createdAt": "2023-02-20T00:35:27.253Z",
+      "id": 3
+    },
+    {
+      "category": "Compra",
+      "description": "Mangás",
+      "price": 100,
+      "type": "outcome",
+      "createdAt": "2023-02-20T00:35:35.845Z",
+      "id": 4
+    },
+    {
+      "category": "Comida",
+      "description": "Sushi",
+      "price": 50,
+      "type": "outcome",
+      "createdAt": "2023-02-20T00:35:48.118Z",
+      "id": 5
+    },
+    {
+      "category": "Saúde",
+      "description": "Teste Covid",
+      "price": 100,
+      "type": "outcome",
+      "createdAt": "2023-02-20T00:36:01.530Z",
+      "id": 6
+    }
+  ]
 }
