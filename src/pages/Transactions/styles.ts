@@ -77,6 +77,9 @@ export const Button = styled.button`
   color: ${(props) => props.theme['red-300']};
   font-size: 1.5rem;
   cursor: pointer;
+  &:hover {
+    filter: brightness(0.6);
+  }
 `
 
 export const ContainerWarning = styled.div`
