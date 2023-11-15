@@ -13,4 +13,4 @@ We also used server-json to create a mock backend on the frontend
 To run the project it is necessary to run server-json using the command 'npm run dev:server' and vite using the command 'npm run dev', when in doubt consult the package.json file
 
 # deploy of application:
-✔️✔️ [https://calm-cendol-256224.netlify.app/](https://dt-moneyy.netlify.app/)https://dt-moneyy.netlify.app/
+✔️✔️ https://dt-moneyy.netlify.app/
