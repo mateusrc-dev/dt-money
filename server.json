@@ -87,6 +87,22 @@
       "type": "income",
       "createdAt": "2023-02-23T04:00:49.691Z",
       "id": 13
+    },
+    {
+      "category": "Jogos",
+      "description": "Comprar o jogo Sea of Stars",
+      "price": 200,
+      "type": "outcome",
+      "createdAt": "2024-05-14T17:05:08.394Z",
+      "id": 14
+    },
+    {
+      "category": "Jogos",
+      "description": "Comprar o jogo Mario Odyssey",
+      "price": 300,
+      "type": "outcome",
+      "createdAt": "2024-05-14T17:06:51.739Z",
+      "id": 15
     }
   ]
 }
